@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSC Giphy</title>
+    <style>
+      
+      html {
+        font-size: 15px;
+        font-family: sans-serif;
+        background: linear-gradient(57deg, #00c6a7, #1e4d92);
+      }
+      img {
+        width: 20%;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="trend"><u><h1><center>TRENDING GIFS</center></h1></u></div>
+      <div class="load" align="center"><button id="loadbtn"><center>LOAD MORE!</center></button></div>
+      <br>
+      <h2><center><pre>SEARCH GIFS(query< space >number)</pre></center></h2>
+      <form>
+        <label for="search">Search</label>
+        <input id="search" type="search" />
+        <button id="btnSearch">Go</button>
+      </form>
+      <br>
+      <div class="out"></div>
+    </main>
+
+    <script>
+      let APIKEY = "bjQXSJij3PuYwZ3AZo0r4vXS95D4KEJU";
+      let lim=10;
+      document.addEventListener("DOMContentLoaded", init);
+      function loadtrend(offset){
+        off=offset;
+        let t = `https://api.giphy.com/v1/gifs/trending?api_key=${APIKEY}&limit=10&offset=${off}`;
+          fetch(t)
+            .then(response => response.json())
+            .then(cont => {
+              console.log(cont.data);
+              console.log("META", cont.meta);
+              let f = document.createElement("fig");
+              let img = document.createElement("img");
+              let output = document.querySelector(".trend");
+              for(let i =0;i<10;i++){
+              f = document.createElement("fig");
+              img = document.createElement("img");
+              img.src = cont.data[i].images.downsized.url;
+              img.alt = cont.data[i].title;
+              console.log(img)
+              f.appendChild(img);
+              output.append(f)}
+            })
+      }
+      function init() {
+        //trending
+        loadtrend(0)
+        document.getElementById("loadbtn").addEventListener("click", e => {
+          e.preventDefault(); //to stop the page reload
+          k=10;
+          loadtrend(k);
+          k+=10;
+        });
+        //search box
+        document.getElementById("btnSearch").addEventListener("click", ev => {
+          ev.preventDefault(); //to stop the page reload
+          let url = `https://api.giphy.com/v1/gifs/search?api_key=${APIKEY}&limit=${lim}&q=`;
+          let str = document.getElementById("search").value.trim();
+          url+=str.substring(0,str.indexOf(' '));
+          lim=str.substring((str.indexOf(' ')+1));
+          console.log(url);
+          fetch(url)
+            .then(response => response.json())
+            .then(content => {
+              console.log(content.data);
+              console.log("META", content.meta);
+              let fig = document.createElement("figure");
+              let img = document.createElement("img");
+              let fc = document.createElement("figcaption");
+              let out = document.querySelector(".out");
+              for(let i =0;i<lim;i++){
+               fig = document.createElement("figure");
+              img = document.createElement("img");
+              fc = document.createElement("figcaption");
+              img.src = content.data[i].images.downsized.url;
+              img.alt = content.data[i].title;
+              fc.textContent = content.data[i].title;
+              fig.appendChild(img);
+              fig.appendChild(fc);
+              out.insertAdjacentElement("afterbegin", fig);}
+              document.querySelector("#search").value = "";
+            })
+            .catch(err => {
+              console.error(err);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
