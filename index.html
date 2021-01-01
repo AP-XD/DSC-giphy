@@ -70,8 +70,8 @@
           ev.preventDefault(); //to stop the page reload
           let url = `https://api.giphy.com/v1/gifs/search?api_key=${APIKEY}&limit=${lim}&q=`;
           let str = document.getElementById("search").value.trim();
-          url+=str.substring(0,str.indexOf(' '));
-          lim=str.substring((str.indexOf(' ')+1));
+          url+=str.substring(0,str.lastIndexOf(' '));
+          lim=str.substring((str.lastIndexOf(' ')+1));
           console.log(url);
           fetch(url)
             .then(response => response.json())
