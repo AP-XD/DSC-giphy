@@ -41,8 +41,7 @@
       let lim=10;
       document.addEventListener("DOMContentLoaded", init);
       function loadtrend(offset){
-        off=offset;
-        let t = `https://api.giphy.com/v1/gifs/trending?api_key=${APIKEY}&limit=10&offset=${off}`;
+        let t = `https://api.giphy.com/v1/gifs/trending?api_key=${APIKEY}&limit=10&offset=${offset}`;
           fetch(t)
             .then(response => response.json())
             .then(cont => {
@@ -61,12 +60,12 @@
               output.append(f)}
             })
       }
+      let k=10;
       function init() {
         //trending
         loadtrend(0)
         document.getElementById("loadbtn").addEventListener("click", e => {
           e.preventDefault(); //to stop the page reload
-          k=10;
           loadtrend(k);
           k+=10;
         });
