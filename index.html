@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DSC Giphy</title>
     <style>
-      
+      .trend{
+        text-align: center;
+        font-family: sans-serif;
+        font-weight: 700;
+        color:black
+      }
       html {
         font-size: 15px;
         font-family: sans-serif;
@@ -18,7 +23,7 @@
   </head>
   <body>
     <main>
-      <div class="trend"><u><h1><center>TRENDING GIFS</center></h1></u></div>
+      <div class="trend"><u><h1>TRENDING GIFS</h1></u></div>
       <div class="load" align="center"><button id="loadbtn"><center>LOAD MORE!</center></button></div>
       <br>
       <h2><center><pre>SEARCH GIFS(query< space >number)</pre></center></h2>
@@ -68,10 +73,15 @@
         //search box
         document.getElementById("btnSearch").addEventListener("click", ev => {
           ev.preventDefault(); //to stop the page reload
-          let url = `https://api.giphy.com/v1/gifs/search?api_key=${APIKEY}&limit=${lim}&q=`;
+          
           let str = document.getElementById("search").value.trim();
-          url+=str.substring(0,str.lastIndexOf(' '));
+          k=str.substring(0,str.lastIndexOf(' '));
           lim=str.substring((str.lastIndexOf(' ')+1));
+          if (str.lastIndexOf(' ')==-1){
+            lim = 10;
+            k=str
+          } 
+          let url=`https://api.giphy.com/v1/gifs/search?api_key=${APIKEY}&limit=${lim}&q=`+k;
           console.log(url);
           fetch(url)
             .then(response => response.json())
